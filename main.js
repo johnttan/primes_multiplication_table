@@ -5,17 +5,17 @@ function generateNDimensionalTable(N){
   var primes = generateNPrimes(N, N);
   var table = [[0]];
   // Populate table with multiplied values
-  for(var i=1;i<N;i++){
+  for(var i=1;i<=N;i++){
     table[i] = [];
-    for(var j=1;j<N;j++){
+    for(var j=1;j<=N;j++){
       table[i][j] = primes[i-1] * primes[j-1];
     }
   };
   // Populate first column and row of table with primes
-  for(var i=1;i<N;i++){
+  for(var i=1;i<=N;i++){
     table[i][0] = primes[i-1];
   };
-  for(var j=1;j<N;j++){
+  for(var j=1;j<=N;j++){
     table[0][j] = primes[j-1];
   };
   return table;
