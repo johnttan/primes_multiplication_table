@@ -1,9 +1,7 @@
 # primes_multiplication_table
 A program that prints out a multiplication table based on prime numbers.
 
-Run 
-
-node main.js
+Run node main.js
 
 Test functions are included for major functionality at the bottom of each file.
 
