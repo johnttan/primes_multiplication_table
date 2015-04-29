@@ -34,6 +34,7 @@ function makeSpacing(len){
 // To account for varying widths of the numbers, it keeps track of the maximum column width so far, and adds the appropriate spacing
 function printTable(table){
   var rows = [];
+  // O(N^2) to print
   for(var i=0;i<table.length;i++){
     var maxColLen = 0;
     for(var j=0;j<table.length;j++){

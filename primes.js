@@ -2,6 +2,7 @@ var fs = require('fs');
 
 // Function for generating primes in range [start, end]
 // Pass in previously generated primes for range from [0, start)
+// Sieve of Erastothenes method for generating primes. A loose upper bound would be O(nlogn)
 function generatePrimes(start, end, oldPrimes){
   var primes = [];
   var sieve = [];
@@ -50,12 +51,15 @@ function generatePrimes(start, end, oldPrimes){
   return primes;
 };
 
+// The blockSize is the size of the range of primes generated in each batch
+// Optimizations may include tweaking the blockSize to reduce the number of concatenations needed
+// Note: The time complexity of this is not polynomial and optimizations will only shave off noticeable constant factors for small N
 function generateNPrimes(N, blockSize){
   var results = [];
   var start = 0;
   var end = blockSize;
   while(results.length < N){
-    // This concatenation is ineffective, a further optimization would be to use linked list instead of arrays.
+    // This concatenation is ineffective, incurring an O(N) cost each time, a further optimization would be to use linked list instead of arrays.
     // This allows O(1) combinations of two sets of primes
     results = results.concat(generatePrimes(start, end, results));
     start = results[results.length-1];
