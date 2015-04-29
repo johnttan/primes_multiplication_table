@@ -19,14 +19,23 @@ function generateNDimensionalTable(N){
   return table;
 };
 
-console.log(generateNDimensionalTable(10));
-
 function testGenerateNDimensionalTable(){
-  var testTable = fs.readFileSync('./testTable.txt');
+  var testTable = JSON.parse(fs.readFileSync('./testTable.txt', {encoding:'utf8'}));
   var generatedTable = generateNDimensionalTable(10);
-  for(var i=0;i<testTable.length;i++){
-    for(var j=0;j<testTable.length;j++){
-
+  var fail = false;
+  for(var i=1;i<testTable.length;i++){
+    for(var j=1;j<testTable.length;j++){
+      if(testTable[i][j] !== generatedTable[i][j]){
+        console.log('failed test', testTable[i][j], generatedTable[i][j], i, j);
+        fail = true;
+      }
     }
+  };
+  if(fail){
+    console.log('FAILED GENERATE N DIMENSIONAL TABLE TEST');
+  }else{
+    console.log('PASSED GENERATE N DIMENSIONAL TABLE TEST');
   }
 };
+
+testGenerateNDimensionalTable();
