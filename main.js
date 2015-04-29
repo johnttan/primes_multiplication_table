@@ -9,6 +9,8 @@ function generatePrimes(start, end, oldPrimes){
   if(start < 3){
     primes.push(2);
     start = 3;
+  }else if(start % 2 === 0){
+    start = start + 1;
   };
   for(var i=start;i<=end;i+=2){
     sieve.push(i);
@@ -47,8 +49,16 @@ function generatePrimes(start, end, oldPrimes){
   return primes;
 };
 
-function generateNPrimes(N){
-
+function generateNPrimes(N, blockSize){
+  var results = [];
+  var start = 0;
+  var end = blockSize;
+  while(results.length < N){
+    results = results.concat(generatePrimes(start, end, results));
+    start = results[results.length-1];
+    end = start + blockSize;
+  };
+  return results;
 };
 
 function compareTwoPrimeSets(test, generated){
@@ -85,6 +95,10 @@ function testGeneratePrimes(){
 
   var testSet = generatedPrimesChainOne + generatedPrimesChainTwo;
   fail = fail && compareTwoPrimeSets(test, generatePrimes);
+
+  var generatedNPrimes = generateNPrimes(5900, 1000);
+  fail = fail && compareTwoPrimeSets(test, generatedNPrimes);
+
   if(fail){
     console.log('FAILED GENERATE PRIMES TEST');
   }else{
