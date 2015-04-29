@@ -112,4 +112,7 @@ function testGeneratePrimes(){
   }
 };
 
-testGeneratePrimes();
+module.exports = {
+  generatePrimes: generatePrimes,
+  generateNPrimes: generateNPrimes
+};
