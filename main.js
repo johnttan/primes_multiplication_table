@@ -1,5 +1,8 @@
 var fs = require('fs');
-function generatePrimes(start, end){
+
+// Function for generating primes in range [start, end]
+// Pass in previously generated primes for range from [0, start)
+function generatePrimes(start, end, oldPrimes){
   var primes = [];
   var sieve = [];
   var p;
@@ -11,6 +14,20 @@ function generatePrimes(start, end){
     sieve.push(i);
   };
   var k = 0;
+  // Process our sieve with the old primes
+  if(oldPrimes){
+    for(var z=0;z<oldPrimes.length;z++){
+      for(var d=k;d<sieve.length;d++){
+        if(sieve[d] % oldPrimes[z] === 0){
+          sieve[d] = 0;
+          // Advance k if we mark the next consecutive non-prime after k
+          if(d === k + 1){
+            k++;
+          }
+        }
+      }
+    }
+  };
   while(k < sieve.length){
     while(sieve[k] === 0 && k < sieve.length){
       k++;
@@ -30,7 +47,20 @@ function generatePrimes(start, end){
   return primes;
 };
 
-// function generateNPrimes()
+function generateNPrimes(N){
+
+};
+
+function compareTwoPrimeSets(test, generated){
+  var fail = false;
+  test.forEach(function(el, ind){
+    if(generated[ind] !== el){
+      console.log('mismatch', el, 'generated=', generated[ind]);
+      fail = true;
+    }
+  });
+  return fail;
+};
 
 function testGeneratePrimes(){
   var test = fs.readFileSync('testPrimes.txt', {encoding:'utf8'});
@@ -48,12 +78,13 @@ function testGeneratePrimes(){
 
   var generatedPrimes = generatePrimes(0,10000);
   var fail = false;
-  primesArray.forEach(function(el, ind){
-    if(generatedPrimes[ind] !== el){
-      console.log('mismatch', el, 'generated=', generatedPrimes[ind]);
-      fail = true;
-    }
-  });
+  fail = fail && compareTwoPrimeSets(test, generatePrimes);
+
+  var generatedPrimesChainOne = generatePrimes(0, 5000);
+  var generatedPrimesChainTwo = generatePrimes(5001, 10000, generatedPrimesChainOne);
+
+  var testSet = generatedPrimesChainOne + generatedPrimesChainTwo;
+  fail = fail && compareTwoPrimeSets(test, generatePrimes);
   if(fail){
     console.log('FAILED GENERATE PRIMES TEST');
   }else{
