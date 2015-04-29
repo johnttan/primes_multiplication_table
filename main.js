@@ -30,6 +30,7 @@ function generatePrimes(start, end, oldPrimes){
       }
     }
   };
+  // Important optimization here is to keep advancing k to the next available spot instead of iterating from the beginning
   while(k < sieve.length){
     while(sieve[k] === 0 && k < sieve.length){
       k++;
@@ -54,6 +55,8 @@ function generateNPrimes(N, blockSize){
   var start = 0;
   var end = blockSize;
   while(results.length < N){
+    // This concatenation is ineffective, a further optimization would be to use linked list instead of arrays.
+    // This allows O(1) combinations of two sets of primes
     results = results.concat(generatePrimes(start, end, results));
     start = results[results.length-1];
     end = start + blockSize;
@@ -88,15 +91,18 @@ function testGeneratePrimes(){
 
   var generatedPrimes = generatePrimes(0,10000);
   var fail = false;
+  // Test basic generation of primes
   fail = fail && compareTwoPrimeSets(test, generatePrimes);
 
   var generatedPrimesChainOne = generatePrimes(0, 5000);
   var generatedPrimesChainTwo = generatePrimes(5001, 10000, generatedPrimesChainOne);
 
   var testSet = generatedPrimesChainOne + generatedPrimesChainTwo;
+  // Test chaining of 2 prime range calculations
   fail = fail && compareTwoPrimeSets(test, generatePrimes);
 
   var generatedNPrimes = generateNPrimes(5900, 1000);
+  // Test generation of N primes
   fail = fail && compareTwoPrimeSets(test, generatedNPrimes);
 
   if(fail){
